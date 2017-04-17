@@ -39,7 +39,6 @@ public class ResponseMessenger {
 
     private static final String CONTENT_TYPE_XML = ".xml";
 
-
     public ResponseMessenger(RequestHandler request) {
         this.request = request;
         path = System.getProperty("user.dir") + ROOT + request.getPathUPI();
@@ -82,12 +81,16 @@ public class ResponseMessenger {
                 }
                 break;
             case "DELETE":
-                httpMethodDelete();
+                if (request.getPathUPI().equals("/")) {
+                    responseMessage = response.setResponseMessage(CODE_404, request.getAcceptHeaderValue(), FILE_NOT_FOUND_MESSAGE.length(), FILE_NOT_FOUND_MESSAGE);
+                } else {
+                    httpMethodDelete();
+                }
                 break;
         }
     }
 
-    public void httpMethodGet() {
+    private void httpMethodGet() {
         File file = new File(path + request.getFileFormat());
         if (file.exists()) {
             try {
@@ -106,48 +109,33 @@ public class ResponseMessenger {
             }
         } else {
             responseMessage = response.setResponseMessage(CODE_404, request.getAcceptHeaderValue(), FILE_NOT_FOUND_MESSAGE.length(), FILE_NOT_FOUND_MESSAGE);
-            System.out.println(responseMessage);
         }
     }
 
-    public void httpMethodPostThroughReadyFile(String bodyMessage) {
+    private void httpMethodPostThroughReadyFile(String bodyMessage) {
         try {
             File file = new File(path + request.getContentTypeValue());
             if (file.exists()) {
                 responseMessage = response.setResponseMessage(CODE_400, request.getAcceptHeaderValue(), FILE_EXISTS_MESSAGE.length(), FILE_EXISTS_MESSAGE);
             } else {
-                FileWriter fileWriter = new FileWriter(path + request.getContentTypeValue());
-                BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-                bufferedWriter.write(bodyMessage);
-                bufferedWriter.close();
+                makeFileIfReadyFile(bodyMessage);
                 responseMessage = response.setResponseMessage(CODE_201, request.getAcceptHeaderValue(), FILE_CREATED_MESSAGE.length(), FILE_CREATED_MESSAGE);
             }
-            System.out.println(responseMessage);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void httpMethodPostThroughContent() {
+    private void httpMethodPostThroughContent() {
         File file = new File(path + request.getContentTypeValue());
         if (file.exists()) {
             responseMessage = response.setResponseMessage(CODE_400, request.getAcceptHeaderValue(),  FILE_EXISTS_MESSAGE.length(), FILE_EXISTS_MESSAGE);
         } else {
-            bookListMaker = new BookListMaker(request.getBodyMessage());
-            bookList = bookListMaker.createBookMap();
-            if (request.getContentTypeValue().equals(CONTENT_TYPE_XML)) {
-                xmlConverter = new XmlConverter(bookList);
-                xmlConverter.getReadyFile();
-                responseMessage = response.setResponseMessage(CODE_201, request.getAcceptHeaderValue(), FILE_CREATED_MESSAGE.length(), FILE_CREATED_MESSAGE);
-            } else {
-                jsonConverter = new JsonConverter(bookList);
-                httpMethodPostThroughReadyFile(jsonConverter.getReadyFile());
-            }
-            System.out.println(responseMessage);
+           makeFileIfContent(CODE_201, FILE_CREATED_MESSAGE);
         }
     }
 
-    public void httpMethodDelete() {
+    private void httpMethodDelete() {
         File file = new File(path + request.getFileFormat());
         if (file.exists()) {
             if (file.exists()) {
@@ -156,46 +144,49 @@ public class ResponseMessenger {
             }
         } else {
             responseMessage = response.setResponseMessage(CODE_404, request.getAcceptHeaderValue(), FILE_NOT_FOUND_MESSAGE.length(), FILE_NOT_FOUND_MESSAGE);
-            System.out.println(responseMessage);
-
         }
     }
 
-    public void httpMethodPutThroughReadyFile(String bodyMessage) {
+    private void httpMethodPutThroughReadyFile(String bodyMessage) {
         try {
             File file = new File(path + request.getContentTypeValue());
             if (!file.exists()) {
                 responseMessage = response.setResponseMessage(CODE_404, request.getAcceptHeaderValue(), FILE_NOT_FOUND_MESSAGE.length(), FILE_NOT_FOUND_MESSAGE);
             } else {
-                FileWriter fileWriter = new FileWriter(path + request.getContentTypeValue());
-                BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-                bufferedWriter.write(bodyMessage);
-                bufferedWriter.close();
+                makeFileIfReadyFile(bodyMessage);
                 responseMessage = response.setResponseMessage(CODE_200, request.getAcceptHeaderValue(), FILE_UPDATED_MESSAGE.length(), FILE_UPDATED_MESSAGE);
             }
-            System.out.println(responseMessage);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void httpMethodPutThroughContent() {
-
+    private void httpMethodPutThroughContent() {
         File file = new File(path + request.getContentTypeValue());
         if (!file.exists()) {
             responseMessage = response.setResponseMessage(CODE_404, request.getAcceptHeaderValue(), FILE_NOT_FOUND_MESSAGE.length(), FILE_NOT_FOUND_MESSAGE);
         } else {
-            bookListMaker = new BookListMaker(request.getBodyMessage());
-            bookList = bookListMaker.createBookMap();
-            if (request.getContentTypeValue().equals(CONTENT_TYPE_XML)) {
-                xmlConverter = new XmlConverter(bookList);
-                xmlConverter.getReadyFile();
-                responseMessage = response.setResponseMessage(CODE_201, request.getAcceptHeaderValue(), FILE_CREATED_MESSAGE.length(), FILE_CREATED_MESSAGE);
-            } else {
-                jsonConverter = new JsonConverter(bookList);
-                httpMethodPostThroughReadyFile(jsonConverter.getReadyFile());
+           makeFileIfContent(CODE_200, FILE_UPDATED_MESSAGE);
             }
         }
-        System.out.println(responseMessage);
+
+    private void makeFileIfContent(String statusCode, String message){
+        bookListMaker = new BookListMaker(request.getBodyMessage());
+        bookList = bookListMaker.createBookMap();
+        if (request.getContentTypeValue().equals(CONTENT_TYPE_XML)) {
+            xmlConverter = new XmlConverter(bookList);
+            xmlConverter.getReadyFile();
+            responseMessage = response.setResponseMessage(statusCode, request.getAcceptHeaderValue(), message.length(), message);
+        } else {
+            jsonConverter = new JsonConverter(bookList);
+            httpMethodPostThroughReadyFile(jsonConverter.getReadyFile());
+        }
+    }
+
+    private void makeFileIfReadyFile(String bodyMessage) throws IOException {
+        FileWriter fileWriter = new FileWriter(path + request.getContentTypeValue());
+        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+        bufferedWriter.write(bodyMessage);
+        bufferedWriter.close();
     }
 }
