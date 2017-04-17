@@ -2,20 +2,15 @@ package server;
 
 import java.io.*;
 import java.net.Socket;
-import java.net.SocketException;
-import java.util.Date;
-
 /**
  * Created by Ksenia on 12.04.2017.
  */
 public class SocketProcessor implements Runnable {
 
-    private Socket clientSocket;
     private BufferedReader bufferedReader;
     private DataOutputStream dataOutputStream;
 
     public SocketProcessor(Socket clientSocket) throws IOException {
-        this.clientSocket = clientSocket;
         bufferedReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         dataOutputStream = new DataOutputStream(clientSocket.getOutputStream());
     }
@@ -31,7 +26,7 @@ public class SocketProcessor implements Runnable {
             ResponseMessenger response = new ResponseMessenger(request);
             response.httpMethod();
 
-            dataOutputStream.writeBytes(response.getResponse());
+            dataOutputStream.writeBytes(response.getResponseMessage());
 
         } catch
                 (Exception e) {

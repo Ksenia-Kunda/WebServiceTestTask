@@ -15,7 +15,7 @@ public class RequestHandler {
     private static final String FORMAT_JSON = ".json";
     private static final String FORMAT_XML = ".xml";
     private String acceptHeaderValue;
-    private String contentType;
+    private String contentTypeValue;
 
     public RequestHandler(String requestString) {
         lines = requestString.split("\r\n");
@@ -59,7 +59,7 @@ public class RequestHandler {
     }
 
     public String getAcceptHeaderValue() {
-            getFileFormat();
+        getFileFormat();
         return acceptHeaderValue;
     }
 
@@ -79,18 +79,18 @@ public class RequestHandler {
         return message;
     }
 
-    public String getContentType() {
+    public String getContentTypeValue() {
         for (int i = 1; i < lines.length; i++) {
             if (lines[i].startsWith(HEADER_CONTENT_TYPE)) {
-                contentType = "." + lines[i].replace(HEADER_CONTENT_TYPE, "").split("/")[1];
+                contentTypeValue = "." + lines[i].replace(HEADER_CONTENT_TYPE, "").split("/")[1];
                 break;
             }
 
         }
-        if (!(contentType.equals(FORMAT_JSON) || contentType.equals(FORMAT_XML))){
-            contentType = FORMAT_JSON;
+        if (!(contentTypeValue.equals(FORMAT_JSON) || contentTypeValue.equals(FORMAT_XML))){
+            contentTypeValue = FORMAT_JSON;
         }
-        return contentType;
+        return contentTypeValue;
     }
 
     public Boolean ifHeaderFileNameIsPresent(){
