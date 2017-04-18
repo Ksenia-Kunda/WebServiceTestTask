@@ -5,6 +5,7 @@ import book.BookListMaker;
 import converter.JsonConverter;
 import converter.JsonParser;
 import converter.XmlConverter;
+import location.StartPageLocation;
 
 import java.io.*;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
 /**
  * Created by Ksenia on 13.04.2017.
  */
-public class ResponseMessenger {
+public class ResponseManager {
 
     private RequestHandler request;
     private String responseMessage;
@@ -23,6 +24,7 @@ public class ResponseMessenger {
     private XmlConverter xmlConverter;
     private JsonParser jsonParser;
     private Response response;
+    private StartPageLocation startPageLocation;
 
     private static final String ROOT = "/src/main/resources";
 
@@ -31,8 +33,6 @@ public class ResponseMessenger {
     private static final String CODE_400 = "400 Bad Request";
     private static final String CODE_201 = "201 Created";
 
-    private static final String START_PAGE_MESSAGE = "This is my server";
-    private static final String FILE_CANT_BE_CREATED_MESSAGE = "File can't be created. Please, write location for the file.";
     private static final String FILE_NOT_FOUND_MESSAGE = "File not found.";
     private static final String FILE_EXISTS_MESSAGE = "File already exists";
     private static final String FILE_DELETED_MESSAGE = "File deleted";
@@ -41,7 +41,7 @@ public class ResponseMessenger {
 
     private static final String CONTENT_TYPE_XML = ".xml";
 
-    public ResponseMessenger(RequestHandler request) {
+    public ResponseManager(RequestHandler request) {
         this.request = request;
         path = System.getProperty("user.dir") + ROOT + request.getPathUPIWithoutParameter();
         response = new Response();
@@ -51,47 +51,44 @@ public class ResponseMessenger {
         return responseMessage;
     }
 
+    public void choseDirection() {
+        if (request.getPathUPI().equals("/")) {
+            startPageActionManager();
+        } else {
+            httpMethod();
+        }
+    }
+
+    public void startPageActionManager() {
+        startPageLocation = new StartPageLocation(request.getMethod(), request.getAcceptHeaderValue());
+        responseMessage = startPageLocation.responseFromStartPage();
+    }
+
     public void httpMethod() {
-        switch (request.getMessage()) {
+        switch (request.getMethod()) {
             case "get":
-                if (request.getPathUPI().equals("/")) {
-                    responseMessage = response.setResponseMessage(CODE_200, request.getAcceptHeaderValue(), START_PAGE_MESSAGE.length(), START_PAGE_MESSAGE);
-                } else {
                     if (request.getPathUPI().contains("?")){
                         httpMethodGetWithParameter();
                     } else {
                         httpMethodGetForAllList();
-                    }
                 }
                 break;
             case "post":
-                if (request.getPathUPI().equals("/")) {
-                    responseMessage = response.setResponseMessage(CODE_400, request.getAcceptHeaderValue(), FILE_CANT_BE_CREATED_MESSAGE.length(), FILE_CANT_BE_CREATED_MESSAGE);
-                } else {
                     if (request.ifHeaderFileNameIsPresent()) {
                         httpMethodPostThroughReadyFile(request.getBodyMessage());
                     } else {
                         httpMethodPostThroughContent();
-                    }
                 }
                 break;
             case "put":
-                if (request.getPathUPI().equals("/")) {
-                    responseMessage = response.setResponseMessage(CODE_404, request.getAcceptHeaderValue(), FILE_NOT_FOUND_MESSAGE.length(), FILE_NOT_FOUND_MESSAGE);
-                } else {
                     if (request.ifHeaderFileNameIsPresent()) {
                         httpMethodPutThroughReadyFile(request.getBodyMessage());
                     } else {
                         httpMethodPutThroughContent();
-                    }
                 }
                 break;
             case "delete":
-                if (request.getPathUPI().equals("/")) {
-                    responseMessage = response.setResponseMessage(CODE_404, request.getAcceptHeaderValue(), FILE_NOT_FOUND_MESSAGE.length(), FILE_NOT_FOUND_MESSAGE);
-                } else {
                     httpMethodDelete();
-                }
                 break;
         }
     }

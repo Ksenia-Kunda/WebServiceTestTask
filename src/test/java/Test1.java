@@ -1,5 +1,4 @@
 import org.junit.Test;
-import server.ResponseMessenger;
 
 import static com.jayway.restassured.RestAssured.*;
 /**

@@ -14,18 +14,12 @@
     </Book>
     <Book>
         <id>3</id>
-        <author>Sam</author>
-        <language/>
-        <edition/>
-    </Book>
-    <Book>
-        <id>4</id>
         <author>Ekel</author>
         <language/>
         <edition>fifth</edition>
     </Book>
     <Book>
-        <id>5</id>
+        <id>4</id>
         <author>Schildt</author>
         <language>C</language>
         <edition>first</edition>

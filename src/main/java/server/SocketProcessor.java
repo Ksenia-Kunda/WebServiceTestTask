@@ -23,8 +23,8 @@ public class SocketProcessor implements Runnable {
             } while (bufferedReader.ready() );
 
             RequestHandler request = new RequestHandler(requestMessage.toLowerCase());
-            ResponseMessenger response = new ResponseMessenger(request);
-            response.httpMethod();
+            ResponseManager response = new ResponseManager(request);
+            response.choseDirection();
 
             dataOutputStream.writeBytes(response.getResponseMessage());
 

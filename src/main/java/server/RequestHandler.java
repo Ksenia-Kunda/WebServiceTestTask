@@ -29,7 +29,7 @@ public class RequestHandler {
         return lines[0].split(" ");
     }
 
-    public String getMessage() {
+    public String getMethod() {
         return getStartLine()[0];
     }
 
