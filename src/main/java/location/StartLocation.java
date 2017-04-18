@@ -1,20 +1,21 @@
 package location;
 
-import server.Response;
+import server.response.Response;
+import server.response.StatusCodeList;
 
 import java.util.Map;
 
 /**
  * Created by Ksenia on 18.04.2017.
  */
-public class StartPageLocation {
+public class StartLocation {
 
     private String methodName;
     private String contentTypeValue;
     private Response response;
     private StatusCodeList statusCodeList;
 
-    public StartPageLocation(String methodName, String contentTypeValue){
+    public StartLocation(String methodName, String contentTypeValue){
         this.methodName = methodName;
         this.contentTypeValue = contentTypeValue;
         response = new Response();

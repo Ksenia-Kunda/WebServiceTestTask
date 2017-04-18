@@ -1,4 +1,4 @@
-package location;
+package server.response;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -11,15 +11,10 @@ public class StatusCodeList {
     private static final String CODE_200 = "200 OK";
     private static final String CODE_404 = "404 Not Found";
     private static final String CODE_400 = "400 Bad Request";
-    private static final String CODE_201 = "201 Created";
 
     private static final String START_PAGE_MESSAGE = "This is my server";
     private static final String FILE_CANT_BE_CREATED_MESSAGE = "File can't be created. Please, write location for the file.";
     private static final String FILE_NOT_FOUND_MESSAGE = "File not found.";
-    private static final String FILE_EXISTS_MESSAGE = "File already exists";
-    private static final String FILE_DELETED_MESSAGE = "File deleted";
-    private static final String FILE_CREATED_MESSAGE = "File created";
-    private static final String FILE_UPDATED_MESSAGE = "File updated";
 
     private static final String METHOD_GET = "get";
     private static final String METHOD_POST = "post";

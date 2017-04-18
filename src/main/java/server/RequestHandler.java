@@ -9,7 +9,7 @@ public class RequestHandler {
     private String[] lines;
     private static final String HEADER_ACCEPT = "accept: ";
     private static final String HEADER_FILE_NAME = "filename: ";
-    private static final String HEADER_CONTENT_TYPE = "content-Type: ";
+    private static final String HEADER_CONTENT_TYPE = "content-type: ";
     private static final String ACCEPT_JSON = "application/json";
     private static final String ACCEPT_XML = "application/xml";
     private static final String FORMAT_JSON = ".json";
@@ -91,11 +91,13 @@ public class RequestHandler {
     public String getContentTypeValue() {
         for (int i = 1; i < lines.length; i++) {
             if (lines[i].startsWith(HEADER_CONTENT_TYPE)) {
+                System.out.println(lines[i]);
                 contentTypeValue = "." + lines[i].replace(HEADER_CONTENT_TYPE, "").split("/")[1];
                 break;
             }
 
         }
+        System.out.println(contentTypeValue);
         if (!(contentTypeValue.equals(FORMAT_JSON) || contentTypeValue.equals(FORMAT_XML))){
             contentTypeValue = FORMAT_JSON;
         }
