@@ -9,7 +9,7 @@ public class BookListMaker {
 
     private String allLinesOfAllbooks[];
     private String[] allBookFields;
-    private int bookCounter;
+    private Integer bookCounter;
     private static final String AUTHOR = "author: ";
     private static final String LANGUAGE = "language: ";
     private static final String EDITION = "edition: ";
@@ -22,6 +22,9 @@ public class BookListMaker {
         bookList = new ArrayList<Book>();
     }
 
+    public BookListMaker(){
+
+    }
 
     public List<Book> createBookMap() {
         int startOfaBookIndex;
@@ -57,11 +60,22 @@ public class BookListMaker {
                         book.setEdition(allBookFields[j].replace(EDITION, ""));
                     }
                 }
-                book.setId(bookCounter);
+                book.setId(bookCounter.toString());
                 bookList.add(book);
                 bookCounter++;
             }
         }
         return bookList;
+    }
+
+    public String getBookThroughId(List<Book> bookList, String parameter) {
+        String bookForResponse="";
+        System.out.println(parameter);
+        for (Book book:bookList) {
+            if (book.getId().equals(parameter)) {
+                bookForResponse = book.toString();
+            }
+        }
+        return bookForResponse;
     }
 }

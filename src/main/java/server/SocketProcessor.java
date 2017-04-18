@@ -22,7 +22,7 @@ public class SocketProcessor implements Runnable {
                 requestMessage += (char) bufferedReader.read();
             } while (bufferedReader.ready() );
 
-            RequestHandler request = new RequestHandler(requestMessage);
+            RequestHandler request = new RequestHandler(requestMessage.toLowerCase());
             ResponseMessenger response = new ResponseMessenger(request);
             response.httpMethod();
 

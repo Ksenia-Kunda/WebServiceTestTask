@@ -29,7 +29,7 @@ public class Response {
 
     public String setResponseMessage(String statusCode, String contentTypeValue, Integer contentLengthValue, String responseMessage) {
         fillResponseLinesMap(statusCode, contentTypeValue, contentLengthValue);
-        stringBuffer = stringBuffer.append(createResponseString()).append(SEPARATOR).append(responseMessage);
+        stringBuffer = createResponseString().append(SEPARATOR).append(responseMessage);
         System.out.println(stringBuffer.toString());
         return stringBuffer.toString();
     }

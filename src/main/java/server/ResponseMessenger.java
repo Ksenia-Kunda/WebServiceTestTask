@@ -3,6 +3,7 @@ package server;
 import book.Book;
 import book.BookListMaker;
 import converter.JsonConverter;
+import converter.JsonParser;
 import converter.XmlConverter;
 
 import java.io.*;
@@ -20,9 +21,10 @@ public class ResponseMessenger {
     private List<Book> bookList;
     private JsonConverter jsonConverter;
     private XmlConverter xmlConverter;
+    private JsonParser jsonParser;
     private Response response;
 
-    private static final String ROOT = "/src/main/resources/";
+    private static final String ROOT = "/src/main/resources";
 
     private static final String CODE_200 = "200 OK";
     private static final String CODE_404 = "404 Not Found";
@@ -41,7 +43,7 @@ public class ResponseMessenger {
 
     public ResponseMessenger(RequestHandler request) {
         this.request = request;
-        path = System.getProperty("user.dir") + ROOT + request.getPathUPI();
+        path = System.getProperty("user.dir") + ROOT + request.getPathUPIWithoutParameter();
         response = new Response();
     }
 
@@ -51,14 +53,18 @@ public class ResponseMessenger {
 
     public void httpMethod() {
         switch (request.getMessage()) {
-            case "GET":
+            case "get":
                 if (request.getPathUPI().equals("/")) {
                     responseMessage = response.setResponseMessage(CODE_200, request.getAcceptHeaderValue(), START_PAGE_MESSAGE.length(), START_PAGE_MESSAGE);
                 } else {
-                    httpMethodGet();
+                    if (request.getPathUPI().contains("?")){
+                        httpMethodGetWithParameter();
+                    } else {
+                        httpMethodGetForAllList();
+                    }
                 }
                 break;
-            case "POST":
+            case "post":
                 if (request.getPathUPI().equals("/")) {
                     responseMessage = response.setResponseMessage(CODE_400, request.getAcceptHeaderValue(), FILE_CANT_BE_CREATED_MESSAGE.length(), FILE_CANT_BE_CREATED_MESSAGE);
                 } else {
@@ -69,7 +75,7 @@ public class ResponseMessenger {
                     }
                 }
                 break;
-            case "PUT":
+            case "put":
                 if (request.getPathUPI().equals("/")) {
                     responseMessage = response.setResponseMessage(CODE_404, request.getAcceptHeaderValue(), FILE_NOT_FOUND_MESSAGE.length(), FILE_NOT_FOUND_MESSAGE);
                 } else {
@@ -80,7 +86,7 @@ public class ResponseMessenger {
                     }
                 }
                 break;
-            case "DELETE":
+            case "delete":
                 if (request.getPathUPI().equals("/")) {
                     responseMessage = response.setResponseMessage(CODE_404, request.getAcceptHeaderValue(), FILE_NOT_FOUND_MESSAGE.length(), FILE_NOT_FOUND_MESSAGE);
                 } else {
@@ -90,12 +96,32 @@ public class ResponseMessenger {
         }
     }
 
-    private void httpMethodGet() {
+    private void httpMethodGetWithParameter(){
+        bookListMaker = new BookListMaker();
+        String parameterValue="";
+        String [] allParameters = request.getParameter().split(",");
+        for (String parameter:allParameters) {
+            if (parameter.startsWith("id")){
+                parameterValue = parameter.split("=")[1];
+                File file = new File(path + request.getFileFormat());
+                if (file.exists()) {
+                    jsonParser = new JsonParser(path + request.getFileFormat());
+                    bookList = jsonParser.parseFromFile();
+                    responseMessage = bookListMaker.getBookThroughId(bookList, parameterValue);
+                    responseMessage = response.setResponseMessage(CODE_200, request.getAcceptHeaderValue(), responseMessage.length(), responseMessage);
+
+                }
+            }
+        }
+
+    }
+
+    private void httpMethodGetForAllList() {
         File file = new File(path + request.getFileFormat());
+        System.out.println(request.getFileFormat());
         if (file.exists()) {
             try {
                 FileInputStream fileInputStream = new FileInputStream(file);
-
                 int s;
                 while ((s = fileInputStream.read()) != -1) {
                     responseMessage += (char) s;
@@ -138,10 +164,8 @@ public class ResponseMessenger {
     private void httpMethodDelete() {
         File file = new File(path + request.getFileFormat());
         if (file.exists()) {
-            if (file.exists()) {
-                file.delete();
-                responseMessage = response.setResponseMessage(CODE_200, request.getAcceptHeaderValue(), FILE_DELETED_MESSAGE.length(), FILE_DELETED_MESSAGE);
-            }
+            file.delete();
+            responseMessage = response.setResponseMessage(CODE_200, request.getAcceptHeaderValue(), FILE_DELETED_MESSAGE.length(), FILE_DELETED_MESSAGE);
         } else {
             responseMessage = response.setResponseMessage(CODE_404, request.getAcceptHeaderValue(), FILE_NOT_FOUND_MESSAGE.length(), FILE_NOT_FOUND_MESSAGE);
         }

@@ -5,12 +5,12 @@ package book;
  */
 public class Book {
 
-    private Integer id;
+    private String id;
     private String language;
     private String edition;
     private String author;
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -46,5 +46,15 @@ public class Book {
 
     public String getAuthor() {
         return author;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "id='" + id + '\'' +
+                ", language='" + language + '\'' +
+                ", edition='" + edition + '\'' +
+                ", author='" + author + '\'' +
+                '}';
     }
 }
