@@ -82,7 +82,7 @@ public class RequestHandler {
         }
         if (lineIndex != 0) {
             for (int i = lineIndex; i < lines.length; i++) {
-                message = lines[i] + "\n";
+                message += lines[i] + "\n";
             }
         }
         return message;
@@ -91,13 +91,10 @@ public class RequestHandler {
     public String getContentTypeValue() {
         for (int i = 1; i < lines.length; i++) {
             if (lines[i].startsWith(HEADER_CONTENT_TYPE)) {
-                System.out.println(lines[i]);
                 contentTypeValue = "." + lines[i].replace(HEADER_CONTENT_TYPE, "").split("/")[1];
                 break;
             }
-
         }
-        System.out.println(contentTypeValue);
         if (!(contentTypeValue.equals(FORMAT_JSON) || contentTypeValue.equals(FORMAT_XML))){
             contentTypeValue = FORMAT_JSON;
         }

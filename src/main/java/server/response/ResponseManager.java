@@ -1,10 +1,10 @@
 package server.response;
 
-import location.StartLocation;
-import location.otherLocation.MethodDelete;
-import location.otherLocation.MethodGet;
-import location.otherLocation.MethodPost;
-import location.otherLocation.MethodPut;
+import methods.StartLocation;
+import methods.otherLocation.MethodDelete;
+import methods.otherLocation.MethodGet;
+import methods.otherLocation.MethodPost;
+import methods.otherLocation.MethodPut;
 import server.RequestHandler;
 
 /**

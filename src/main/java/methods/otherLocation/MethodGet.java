@@ -1,4 +1,4 @@
-package location.otherLocation;
+package methods.otherLocation;
 
 import book.Book;
 import book.BookListMaker;
@@ -30,6 +30,7 @@ public class MethodGet {
     private static final String CODE_404 = "404 Not Found";
 
     private static final String FILE_NOT_FOUND_MESSAGE = "File not found.";
+    private static final String BOOK_NOT_FOUND_MESSAGE = "Book not found.";
 
     public MethodGet(RequestHandler request, String path){
         this.request = request;
@@ -59,7 +60,11 @@ public class MethodGet {
                     jsonParser = new JsonParser(path + request.getFileFormat());
                     bookList = jsonParser.parseFromFile();
                     responseMessage = bookListMaker.getBookThroughId(bookList, parameterValue);
-                    responseMessage = response.setResponseMessage(CODE_200, request.getAcceptHeaderValue(), responseMessage.length(), responseMessage);
+                    if (responseMessage.equals(" ")){
+                        responseMessage = response.setResponseMessage(CODE_404, request.getAcceptHeaderValue(), BOOK_NOT_FOUND_MESSAGE.length(), BOOK_NOT_FOUND_MESSAGE);
+                    }else {
+                        responseMessage = response.setResponseMessage(CODE_200, request.getAcceptHeaderValue(), responseMessage.length(), responseMessage);
+                    }
                 } else {
                     responseMessage = response.setResponseMessage(CODE_404, request.getAcceptHeaderValue(), FILE_NOT_FOUND_MESSAGE.length(), FILE_NOT_FOUND_MESSAGE);
                 }
@@ -70,7 +75,6 @@ public class MethodGet {
 
     private String httpMethodGetForAllList() {
         file = new File(path + request.getFileFormat());
-        System.out.println(request.getFileFormat());
         if (file.exists()) {
             try {
                 FileInputStream fileInputStream = new FileInputStream(file);

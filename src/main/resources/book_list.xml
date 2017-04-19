@@ -1,27 +1,15 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<Book_List>
-    <Book>
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<book_list>
+    <book>
         <id>1</id>
-        <author>Herbert Schildt</author>
-        <language>Java</language>
+        <author>herbert schildt</author>
+        <language>java</language>
         <edition>third</edition>
-    </Book>
-    <Book>
+    </book>
+    <book>
         <id>2</id>
-        <author>E.Balagurusamy</author>
-        <language>C++</language>
-        <edition/>
-    </Book>
-    <Book>
-        <id>3</id>
-        <author>Ekel</author>
-        <language/>
+        <author>e.balagurusamy</author>
+        <language>c++</language>
         <edition>fifth</edition>
-    </Book>
-    <Book>
-        <id>4</id>
-        <author>Schildt</author>
-        <language>C</language>
-        <edition>first</edition>
-    </Book>
-</Book_List>
+    </book>
+</book_list>

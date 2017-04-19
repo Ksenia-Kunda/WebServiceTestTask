@@ -11,9 +11,10 @@ public class StatusCodeList {
     private static final String CODE_200 = "200 OK";
     private static final String CODE_404 = "404 Not Found";
     private static final String CODE_400 = "400 Bad Request";
+    private static final String CODE_403 = "403 Forbidden";
 
     private static final String START_PAGE_MESSAGE = "This is my server";
-    private static final String FILE_CANT_BE_CREATED_MESSAGE = "File can't be created. Please, write location for the file.";
+    private static final String FILE_CANT_BE_CREATED_MESSAGE = "File can't be created. Please, write methods for the file.";
     private static final String FILE_NOT_FOUND_MESSAGE = "File not found.";
 
     private static final String METHOD_GET = "get";
@@ -29,7 +30,7 @@ public class StatusCodeList {
 
     public Map<String, String []> createStatusCodeListForStartPage() {
         statusCodeList.put(METHOD_GET, new String[]{CODE_200, START_PAGE_MESSAGE});
-        statusCodeList.put(METHOD_POST, new String[]{CODE_400, FILE_CANT_BE_CREATED_MESSAGE});
+        statusCodeList.put(METHOD_POST, new String[]{CODE_403, FILE_CANT_BE_CREATED_MESSAGE});
         statusCodeList.put(METHOD_PUT, new String[]{CODE_404, FILE_NOT_FOUND_MESSAGE});
         statusCodeList.put(METHOD_DELETE, new String[]{CODE_404, FILE_NOT_FOUND_MESSAGE});
         return statusCodeList;

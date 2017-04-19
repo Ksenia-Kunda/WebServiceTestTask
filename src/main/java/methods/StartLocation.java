@@ -1,4 +1,4 @@
-package location;
+package methods;
 
 import server.response.Response;
 import server.response.StatusCodeList;

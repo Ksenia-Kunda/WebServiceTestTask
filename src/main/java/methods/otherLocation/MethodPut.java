@@ -1,11 +1,9 @@
-package location.otherLocation;
+package methods.otherLocation;
 
 import book.Book;
 import book.BookListMaker;
 import converter.JsonConverter;
-import converter.JsonParser;
 import converter.XmlConverter;
-import location.StartLocation;
 import server.RequestHandler;
 import server.response.Response;
 

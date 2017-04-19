@@ -1,5 +1,7 @@
 package book;
 
+import org.springframework.web.client.HttpClientErrorException;
+
 import java.util.*;
 
 /**
@@ -30,7 +32,6 @@ public class BookListMaker {
         int startOfaBookIndex;
         int endOfaBookIndex=0;
 
-        System.out.println();
         for (int i = 0; i < allLinesOfAllbooks.length; i++) {
             if (allLinesOfAllbooks[i].startsWith(AUTHOR)) {
                 book = new Book();
@@ -69,13 +70,12 @@ public class BookListMaker {
     }
 
     public String getBookThroughId(List<Book> bookList, String parameter) {
-        String bookForResponse="";
-        System.out.println(parameter);
-        for (Book book:bookList) {
-            if (book.getId().equals(parameter)) {
-                bookForResponse = book.toString();
+        String bookForResponse = " ";
+            for (Book book : bookList) {
+                if (book.getId().equals(parameter)) {
+                    bookForResponse = book.toString();
+                }
             }
-        }
         return bookForResponse;
     }
 }

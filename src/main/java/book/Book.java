@@ -27,7 +27,7 @@ public class Book {
     }
 
     public String getId() {
-        return id.toString();
+        return id;
     }
 
     public String getLanguage() {

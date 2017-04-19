@@ -1,4 +1,4 @@
-package location.otherLocation;
+package methods.otherLocation;
 
 import server.RequestHandler;
 import server.response.Response;
