@@ -38,7 +38,7 @@ public class StatusCodeTest {
 
             RestTemplate restTemplate = new RestTemplate();
 
-            String book = "http://localhost:8080/book_list?id=2";
+            String book = "http://localhost:8080/book_list_for_GET_with_parameter?id=2";
 
             ResponseEntity <String> response = restTemplate.getForEntity(book, String.class);
             Assert.assertEquals(response.getStatusCode().value(), 200);

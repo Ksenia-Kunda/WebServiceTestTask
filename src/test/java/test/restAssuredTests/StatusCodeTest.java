@@ -26,18 +26,11 @@ public class StatusCodeTest {
     }
 
     @Test
-    public void unsuccessfulGet(){
-        Response book = given().when().get("/book_list_nonexistent").thenReturn();
-
+    public void unsuccessfulPut(){
+        String newBook = "Author: Shildt \n" +
+                "Language: java \n" +
+                "Edition: eight";
+        Response book = given().contentType("application/xml").body(newBook).when().put("/book_list_for_PUT_unsuccessful").thenReturn();
         Assert.assertEquals(book.getStatusCode(), 404);
     }
-
-
-
-//    @Test
-//    public void successfulGetMessage(){
-//        Response book = given().when().get().thenReturn();
-//
-//        Assert.assertEquals(book.getBody().print(), "This is my server");
-//    }
 }

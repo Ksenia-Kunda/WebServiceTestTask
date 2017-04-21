@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<book_list>
+    <book>
+        <id>1</id>
+        <author>herbert schildt</author>
+        <language>java</language>
+        <edition>third</edition>
+    </book>
+</book_list>

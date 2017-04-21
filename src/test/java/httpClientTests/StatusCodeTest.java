@@ -18,7 +18,7 @@ import java.io.IOException;
  */
 public class StatusCodeTest {
 
-    private static final String ROOT = "/src/test/resources/book_list_for_put.xml";
+    private static final String ROOT = "/src/test/resources/book_list_for_put_from_file.xml";
 
     @Test
     public void unsuccessfulDelete() {
